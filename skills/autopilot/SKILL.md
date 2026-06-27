@@ -20,7 +20,7 @@ They asked you to run it — run it.
 ## When this applies
 
 Only on explicit opt-in: "autopilot", "yolo", "автономно", "не спрашивай —
-сделай сам", "прогони весь цикл сам". Without that phrase, use `lite-build`
+сделай сам", "прогони весь цикл сам". Without that phrase, use `superpowers-lite`
 (default) or the gated `superpowers:brainstorming` chain. If you are unsure
 whether the user opted into autonomy, you are NOT in autopilot — fall back to
 the gated path.
