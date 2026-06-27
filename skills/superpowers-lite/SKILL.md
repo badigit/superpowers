@@ -1,9 +1,9 @@
 ---
-name: lite-build
-description: Use for small-to-medium implementation work and fixes — inline TDD in the current session, no separate spec/plan documents and no subagents. This is the DEFAULT for routine changes. Escalate to the full brainstorming → writing-plans → subagent-driven chain only for multi-subsystem features, high-risk changes, or when the user explicitly asks to "use superpowers".
+name: superpowers-lite
+description: Use for small-to-medium implementation work and fixes — inline TDD in the current session, no separate spec/plan documents and no subagents. This is the DEFAULT for routine changes. Triggers include "lite", "лайтом", "superpowers lite". Escalate to the full brainstorming → writing-plans → subagent-driven chain only for multi-subsystem features, high-risk changes, or when the user explicitly asks to "use superpowers".
 ---
 
-# Lite Build
+# Superpowers Lite
 
 A lightweight, single-session development flow for the everyday case: a focused
 change in a codebase you already understand, where the full
@@ -17,7 +17,7 @@ documents, fresh-subagent-per-task dispatch, and multi-stage review loops.
 
 ## When to use this (and when NOT)
 
-Use **lite-build** when:
+Use **superpowers-lite** when:
 - The change touches a few files in a codebase whose patterns you already know.
 - The goal is clear enough to state in one or two sentences.
 - One person (you, in this session) can hold the whole change in context.
@@ -30,7 +30,7 @@ Escalate to the **full chain** (`superpowers:brainstorming` → `writing-plans` 
 - The user explicitly says "use superpowers" / "давай через superpowers" / asks
   for a design doc or implementation plan.
 
-If you start in lite-build and discover mid-flight that the task is actually one
+If you start in superpowers-lite and discover mid-flight that the task is actually one
 of the escalation cases above — **stop and say so**. Offer to switch to the full
 chain rather than forcing a large change through the light path.
 
@@ -67,7 +67,7 @@ chain rather than forcing a large change through the light path.
 
 ## What this deliberately drops (vs. the full chain)
 
-| Full chain | lite-build |
+| Full chain | superpowers-lite |
 |---|---|
 | `design.md` spec + user approval gate | 1–2 sentence inline scope |
 | `plan.md` with bite-sized task breakdown | none — you hold the plan in context |
@@ -76,12 +76,12 @@ chain rather than forcing a large change through the light path.
 | final whole-branch review subagent | optional `requesting-code-review` if risky |
 
 The cost saved is mostly **context rebuilds** — the full chain re-establishes
-context on every subagent dispatch. lite-build pays that once.
+context on every subagent dispatch. superpowers-lite pays that once.
 
 ## Red Flags
 
 - "This is actually three features" → stop, escalate to brainstorming.
 - "I'm not sure what the user wants" → ask, or escalate to brainstorming. Don't
   guess your way through implementation.
-- "I'll skip the test, it's trivial" → no. TDD is the part lite-build keeps.
+- "I'll skip the test, it's trivial" → no. TDD is the part superpowers-lite keeps.
 - "It probably works" → run it. verification-before-completion is not optional.
