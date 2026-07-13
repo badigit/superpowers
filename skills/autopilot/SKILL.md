@@ -63,7 +63,17 @@ Stop and surface to the user when, and only when:
    that fails and you can't fix, contradictory requirements.
 2. **Outcome-changing ambiguity** — a decision where picking wrong would build
    the wrong thing, and neither the spec nor the codebase settles it. Autonomy
-   is not permission to guess about what the user actually wants.
+   is not permission to guess about what the user actually wants. This
+   includes newly discovered forks: mid-build you uncover a design-affecting
+   choice, alternative approaches, or a fact that invalidates a spec
+   assumption.
+
+   **How to ask when this fires:** present the fork as ONE concrete question —
+   what you discovered, 2-3 options with trade-offs, and your recommendation.
+   Batch related discoveries into a single interrupt instead of a stream of
+   questions. After the answer, record the decision in the spec/plan and
+   resume fully autonomously — a halt is a data request, not a mode change
+   back to gated confirmations.
 3. **Default-branch merge or deploy.** You MAY commit, push a feature branch,
    and open a PR autonomously. You may NOT merge to main/master or deploy —
    stop there and hand it back.
