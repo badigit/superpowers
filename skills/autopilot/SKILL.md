@@ -1,6 +1,6 @@
 ---
 name: autopilot
-description: Autonomous full-cycle development — run the entire brainstorming → writing-plans → subagent-driven-development → finishing chain end-to-end WITHOUT pausing at human approval gates. Use ONLY when the user explicitly opts in with phrases like "autopilot", "yolo", "автономно", "не спрашивай — сделай сам", "прогони весь цикл сам". Replaces every optional human checkpoint with a self-review and proceeds; halts ONLY for a genuine blocker, outcome-changing ambiguity, or before merging to the default branch / deploying.
+description: Autonomous full-cycle development — run the entire brainstorming → writing-plans → subagent-driven-development → finishing chain end-to-end WITHOUT pausing at human approval gates. Use ONLY when the user explicitly opts in with phrases like "autopilot", "yolo", "автономно", "не спрашивай — сделай сам", "прогони весь цикл сам". ALSO use mid-chain — when a spec/design was just approved collaboratively and the user says to continue autonomously ("дальше сам", "дальше на автопилоте", "исполнение автономно") — enter at writing-plans and run to the end. Replaces every optional human checkpoint with a self-review and proceeds; halts ONLY for a genuine blocker, outcome-changing ambiguity, or before merging to the default branch / deploying.
 ---
 
 # Autopilot (Autonomous Superpowers)
@@ -24,6 +24,36 @@ Only on explicit opt-in: "autopilot", "yolo", "автономно", "не спр
 (default) or the gated `superpowers:brainstorming` chain. If you are unsure
 whether the user opted into autonomy, you are NOT in autopilot — fall back to
 the gated path.
+
+## Entry points
+
+**Full cycle (from scratch).** The user hands over the whole task. Start at
+step 1 below; the design too is self-approved.
+
+**Mid-chain handoff (the common case).** The user participated in
+brainstorming — the design/spec was discussed and approved collaboratively —
+and then says "дальше сам" / "дальше на автопилоте" / "исполнение автономно".
+Skip step 2: the approved spec IS the contract. Do not re-litigate or expand
+it; treat every decision recorded in it as user-approved. Enter at step 3
+(Plan) and run to the end. If, while planning or building, you discover the
+spec is materially wrong or incomplete — that is halt condition #2, not a
+license to redesign silently.
+
+## Loop-readiness (running under ralph-loop or repeated re-invocation)
+
+Autopilot is safe to re-enter: the chain's state lives on disk, not in
+conversation memory. On every (re)entry, before doing anything else, resume
+from durable state instead of restarting:
+
+1. Spec exists in `docs/superpowers/specs/`? → design is done, don't redo it.
+2. Plan exists in `docs/superpowers/plans/`? → planning is done, don't redo it.
+3. Progress ledger (`.superpowers/sdd/progress.md`) lists completed tasks? →
+   trust it and `git log`; resume at the first task not marked complete. Never
+   re-dispatch a completed task.
+4. All tasks complete? → proceed to finishing (push, PR), then report and stop.
+
+This makes autopilot idempotent: a loop that re-invokes it converges on the
+finished PR instead of duplicating work.
 
 ## Halt conditions — the ONLY reasons to stop and ask
 
