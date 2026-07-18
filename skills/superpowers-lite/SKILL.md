@@ -57,6 +57,10 @@ chain rather than forcing a large change through the light path.
    run the actual tests/build and confirm the output before saying it works.
    Evidence before assertions.
 
+6. **Report.** In a beads project, when the work runs under a bead, close out
+   with bead bookkeeping and the checklist-style report below (see "Completion
+   Report — beads projects only"). Otherwise report normally.
+
 ## Self-Review Checklist
 
 - **Spec match:** does the diff do what step 1 said — no more (YAGNI), no less?
@@ -64,6 +68,38 @@ chain rather than forcing a large change through the light path.
 - **Reuse:** did you duplicate something that already exists in the codebase?
 - **Boundaries:** is each touched file still focused, or did one grow unwieldy?
 - **Leftovers:** debug prints, commented-out code, TODOs you actually resolved?
+
+## Completion Report (beads projects only)
+
+**Detection:** `bd where` succeeds (or `.beads/` exists at the project root)
+AND the work runs under a bead id — one from the dispatch prompt (BEAD_ID) or
+a bead created for this work. Otherwise skip this section: report as usual and
+do not mention beads.
+
+Before the final message:
+
+- `bd update {BEAD_ID} --status in_progress` — if not already; never leave it
+  `open`. Leave it `in_progress`: the orchestrator closes it after the merge.
+- `bd comments add {BEAD_ID} "Completed: <summary>"`
+
+Final message format — completion-validation hooks in beads projects check for
+exactly these elements, so keep it under 25 lines / 1200 chars:
+
+```
+BEAD {BEAD_ID} COMPLETE
+Branch: bd-{BEAD_ID}        (or Worktree: .worktrees/bd-{BEAD_ID})
+Checklist:
+- [x] <requirement 1 from the bead description>
+- [x] <requirement 2>
+Files: <names only>
+Tests: pass
+Summary: <1 sentence>
+```
+
+Re-read `bd show {BEAD_ID}` first and derive the checklist from the bead's
+description and acceptance criteria. Every item must be checked `[x]` — an
+unchecked `[ ]` item means the work is not complete: finish it or update the
+bead, don't ship the report.
 
 ## What this deliberately drops (vs. the full chain)
 

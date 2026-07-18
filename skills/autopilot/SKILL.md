@@ -45,8 +45,10 @@ Autopilot is safe to re-enter: the chain's state lives on disk, not in
 conversation memory. On every (re)entry, before doing anything else, resume
 from durable state instead of restarting:
 
-1. Spec exists in `docs/superpowers/specs/`? → design is done, don't redo it.
-2. Plan exists in `docs/superpowers/plans/`? → planning is done, don't redo it.
+1. Spec exists in `docs/superpowers/specs/` (beads projects:
+   `.designs/bd-<id>/spec.md`)? → design is done, don't redo it.
+2. Plan exists in `docs/superpowers/plans/` (beads projects:
+   `.designs/bd-<id>/plan.md`)? → planning is done, don't redo it.
 3. Progress ledger (`.superpowers/sdd/progress.md`) lists completed tasks? →
    trust it and `git log`; resume at the first task not marked complete. Never
    re-dispatch a completed task.

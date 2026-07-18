@@ -130,6 +130,24 @@ From 24 failure memories:
 - Implications of success
 - ANY communication suggesting completion/correctness
 
+## After Verification: Persist the Insight (beads projects only)
+
+Run `bd where` quietly (or check for a `.beads/` directory at the project
+root). No beads workspace → skip this section entirely — behave exactly as
+before and do not mention beads.
+
+Once verification has actually passed and you are about to make the completion
+claim, store the non-obvious lesson this work produced:
+
+```bash
+bd remember "<problem> → <solution>. <context>"
+```
+
+Only insights worth finding later qualify: root cause + fix + why, a gotcha
+discovered, a constraint that wasn't documented. Routine "tests pass" is not a
+memory. One line per insight; if the work taught nothing non-obvious, store
+nothing.
+
 ## The Bottom Line
 
 **No shortcuts for verification.**
