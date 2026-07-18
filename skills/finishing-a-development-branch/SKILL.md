@@ -37,6 +37,24 @@ Stop. Don't proceed to Step 2.
 
 **If tests pass:** Continue to Step 2.
 
+### Step 1b: Capture the Insight (beads projects only)
+
+Run `bd where` quietly (or check for a `.beads/` directory at the project
+root). No beads workspace → skip straight to Step 2 and do not mention beads.
+
+Otherwise, before integrating the branch, store what this work taught you so
+it survives the session:
+
+```bash
+bd remember "<problem> → <solution>. <context why>"
+```
+
+One line, specific enough to be found later. "pg pool exhaustion under load →
+max=20 + idle_timeout=30s; default max=10 gave 503s at >50 rps" is a memory;
+"fixed the bug" is not. If the work taught nothing non-obvious, or
+verification-before-completion already stored this insight for the same work,
+skip — do not duplicate.
+
 ### Step 2: Detect Environment
 
 **Determine workspace state before presenting options:**

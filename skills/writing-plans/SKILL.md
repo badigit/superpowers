@@ -17,6 +17,7 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 **Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
+- (Beads projects save to `.designs/bd-{id}/plan.md` and mirror tasks as child beads — see Beads Bridge below)
 
 ## Scope Check
 
@@ -152,6 +153,35 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 **3. Type consistency:** Do the types, method signatures, and property names you used in later tasks match what you defined in earlier tasks? A function called `clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug.
 
 If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
+
+## Beads Bridge (projects with a beads workspace)
+
+**Detection:** run `bd where` quietly (or check for a `.beads/` directory at
+the project root). If there is no beads workspace, this section does not
+apply — follow the skill exactly as written above and do not mention beads.
+
+With a beads workspace, anchor the plan to the bead the work runs under — the
+same id the spec used during brainstorming (`.designs/bd-{id}/spec.md`). If no
+bead exists yet, offer to create one first.
+
+1. **Save the plan to `.designs/bd-{id}/plan.md`** (next to the spec) instead
+   of `docs/superpowers/plans/`.
+2. **Record the path on the bead** so it is visible in `bd show {id}`:
+   `bd update {id} --design ".designs/bd-{id}/plan.md"`
+3. **Create the plan's tasks as child beads** — the tasks must exist in beads,
+   not only as checkbox text. The parent bead acts as the epic:
+   - One child per task:
+     `bd create "Task N: <component name>" -d "See .designs/bd-{id}/plan.md — Task N" --parent {id}`
+   - Ordering: a task that must wait for another is blocked by it —
+     `bd dep add {child-N+1} {child-N}` (or `--deps {child-N}` at create time).
+     Then `bd ready` yields exactly the unblocked tasks.
+   The plan document remains the single source of detail (code, commands,
+   expected output); the child beads are the tracking layer that survives
+   context compaction. Keep the checkbox steps in the plan — they mirror
+   progress inside each task.
+4. During execution, implementers follow bead discipline: mark their child bead
+   `in_progress`, log progress with `bd comments add`, and the orchestrator
+   closes children as they merge.
 
 ## Execution Handoff
 
