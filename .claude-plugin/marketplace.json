@@ -1,19 +1,17 @@
 {
-  "name": "superpowers-dev",
-  "description": "Development marketplace for Superpowers core skills library",
+  "name": "dim",
+  "description": "Личный marketplace: форк superpowers и смежный тулинг",
   "owner": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
+    "name": "badigit"
   },
   "plugins": [
     {
-      "name": "superpowers",
-      "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques",
-      "version": "6.1.1",
+      "name": "superpowers-dim",
+      "description": "Форк obra/superpowers: Beads Bridge, режимы lite/autopilot, без SessionStart-инъекции",
+      "version": "6.1.1-dim.1",
       "source": "./",
       "author": {
-        "name": "Jesse Vincent",
-        "email": "jesse@fsck.com"
+        "name": "badigit"
       }
     }
   ]
