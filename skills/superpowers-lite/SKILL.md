@@ -22,7 +22,7 @@ Use **superpowers-lite** when:
 - The goal is clear enough to state in one or two sentences.
 - One person (you, in this session) can hold the whole change in context.
 
-Escalate to the **full chain** (`superpowers:brainstorming` → `writing-plans` →
+Escalate to the **full chain** (`superpowers-dim:brainstorming` → `writing-plans` →
 `subagent-driven-development`) when ANY of these is true:
 - The request spans multiple independent subsystems.
 - The design is genuinely unclear and needs collaborative exploration first.
@@ -41,7 +41,7 @@ chain rather than forcing a large change through the light path.
    ambiguous. Do NOT write a `design.md` or `plan.md` — the chat message IS the
    spec.
 
-2. **Work test-first.** Follow `superpowers:test-driven-development`: write the
+2. **Work test-first.** Follow `superpowers-dim:test-driven-development`: write the
    failing test, watch it fail, write the minimal code, watch it pass. Keep each
    red→green cycle small.
 
@@ -51,9 +51,9 @@ chain rather than forcing a large change through the light path.
 4. **One self-review pass.** Before declaring done, re-read your own diff with
    fresh eyes against the checklist below. Fix what you find inline — no separate
    reviewer subagent for routine work. (For anything you'd call risky, dispatch
-   one reviewer via `superpowers:requesting-code-review` instead of self-review.)
+   one reviewer via `superpowers-dim:requesting-code-review` instead of self-review.)
 
-5. **Verify, then claim.** Follow `superpowers:verification-before-completion`:
+5. **Verify, then claim.** Follow `superpowers-dim:verification-before-completion`:
    run the actual tests/build and confirm the output before saying it works.
    Evidence before assertions.
 

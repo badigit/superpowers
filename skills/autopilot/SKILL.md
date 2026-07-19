@@ -21,7 +21,7 @@ They asked you to run it — run it.
 
 Only on explicit opt-in: "autopilot", "yolo", "автономно", "не спрашивай —
 сделай сам", "прогони весь цикл сам". Without that phrase, use `superpowers-lite`
-(default) or the gated `superpowers:brainstorming` chain. If you are unsure
+(default) or the gated `superpowers-dim:brainstorming` chain. If you are unsure
 whether the user opted into autonomy, you are NOT in autopilot — fall back to
 the gated path.
 
@@ -86,20 +86,20 @@ Everything else proceeds without a check-in.
 
 ## The Autonomous Cycle
 
-1. **Isolate.** Use `superpowers:using-git-worktrees` for an isolated branch/
+1. **Isolate.** Use `superpowers-dim:using-git-worktrees` for an isolated branch/
    worktree. Never run autopilot on main/master directly.
-2. **Design (self-approved).** Run `superpowers:brainstorming` to produce the
+2. **Design (self-approved).** Run `superpowers-dim:brainstorming` to produce the
    spec, but self-approve each section instead of waiting. Still write the spec
    doc and run the spec self-review. An outcome-changing clarifying question is
    a halt condition (#2); otherwise pick the sensible default, record it in one
    line, move on.
-3. **Plan (self-approved).** Run `superpowers:writing-plans`. Auto-select
+3. **Plan (self-approved).** Run `superpowers-dim:writing-plans`. Auto-select
    subagent-driven execution (the recommended path) without asking. Run the plan
    self-review.
-4. **Build.** Run `superpowers:subagent-driven-development` end to end — it is
+4. **Build.** Run `superpowers-dim:subagent-driven-development` end to end — it is
    already continuous (no between-task check-ins). Honor its review loops fully;
    autonomy removes the human gates, NOT the quality gates.
-5. **Finish.** Run `superpowers:finishing-a-development-branch` — its
+5. **Finish.** Run `superpowers-dim:finishing-a-development-branch` — its
    autonomous default: confirm tests pass, merge into the base branch, push
    (or push + self-merged PR when the base is busy or repo convention wants a
    PR), clean up the branch. Report what was merged. Do NOT deploy.
@@ -110,7 +110,7 @@ When the cycle completes (or halts), give one compact report: what was built,
 the spec and plan file paths, the merged branch (and PR link if one was
 used), test results, and any
 decisions you self-approved that the user might want to revisit.
-`superpowers:verification-before-completion` still applies — evidence before
+`superpowers-dim:verification-before-completion` still applies — evidence before
 claims.
 
 ## Red Flags
