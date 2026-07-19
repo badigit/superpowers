@@ -1,6 +1,6 @@
 ---
 name: autopilot
-description: Autonomous full-cycle development — run the entire brainstorming → writing-plans → subagent-driven-development → finishing chain end-to-end WITHOUT pausing at human approval gates. Use ONLY when the user explicitly opts in with phrases like "autopilot", "yolo", "автономно", "не спрашивай — сделай сам", "прогони весь цикл сам". ALSO use mid-chain — when a spec/design was just approved collaboratively and the user says to continue autonomously ("дальше сам", "дальше на автопилоте", "исполнение автономно") — enter at writing-plans and run to the end. Replaces every optional human checkpoint with a self-review and proceeds; halts ONLY for a genuine blocker, outcome-changing ambiguity, or before merging to the default branch / deploying.
+description: Autonomous full-cycle development — run the entire brainstorming → writing-plans → subagent-driven-development → finishing chain end-to-end WITHOUT pausing at human approval gates. Use ONLY when the user explicitly opts in with phrases like "autopilot", "yolo", "автономно", "не спрашивай — сделай сам", "прогони весь цикл сам". ALSO use mid-chain — when a spec/design was just approved collaboratively and the user says to continue autonomously ("дальше сам", "дальше на автопилоте", "исполнение автономно") — enter at writing-plans and run to the end. Replaces every optional human checkpoint with a self-review and proceeds; halts ONLY for a genuine blocker, outcome-changing ambiguity, or before deploying.
 ---
 
 # Autopilot (Autonomous Superpowers)
@@ -52,10 +52,11 @@ from durable state instead of restarting:
 3. Progress ledger (`.superpowers/sdd/progress.md`) lists completed tasks? →
    trust it and `git log`; resume at the first task not marked complete. Never
    re-dispatch a completed task.
-4. All tasks complete? → proceed to finishing (push, PR), then report and stop.
+4. All tasks complete? → proceed to finishing (merge + push), then report and
+   stop.
 
 This makes autopilot idempotent: a loop that re-invokes it converges on the
-finished PR instead of duplicating work.
+integrated branch instead of duplicating work.
 
 ## Halt conditions — the ONLY reasons to stop and ask
 
@@ -76,8 +77,9 @@ Stop and surface to the user when, and only when:
    questions. After the answer, record the decision in the spec/plan and
    resume fully autonomously — a halt is a data request, not a mode change
    back to gated confirmations.
-3. **Default-branch merge or deploy.** You MAY commit, push a feature branch,
-   and open a PR autonomously. You may NOT merge to main/master or deploy —
+3. **Deploy.** You MAY commit, push, and integrate the finished branch into
+   main/master autonomously (per `~/.claude/rules/git-integration.md`: merge +
+   push, or a self-merged PR). You may NOT deploy to any live environment —
    stop there and hand it back.
 
 Everything else proceeds without a check-in.
@@ -97,15 +99,16 @@ Everything else proceeds without a check-in.
 4. **Build.** Run `superpowers:subagent-driven-development` end to end — it is
    already continuous (no between-task check-ins). Honor its review loops fully;
    autonomy removes the human gates, NOT the quality gates.
-5. **Finish.** Run `superpowers:finishing-a-development-branch`, but instead of
-   presenting merge/PR/cleanup options, auto-pick: confirm tests pass, push the
-   branch, open a PR, then STOP. Report the PR. Do not merge to the default
-   branch, do not deploy.
+5. **Finish.** Run `superpowers:finishing-a-development-branch` — its
+   autonomous default: confirm tests pass, merge into the base branch, push
+   (or push + self-merged PR when the base is busy or repo convention wants a
+   PR), clean up the branch. Report what was merged. Do NOT deploy.
 
 ## Report at the end
 
 When the cycle completes (or halts), give one compact report: what was built,
-the spec and plan file paths, the branch/PR link, test results, and any
+the spec and plan file paths, the merged branch (and PR link if one was
+used), test results, and any
 decisions you self-approved that the user might want to revisit.
 `superpowers:verification-before-completion` still applies — evidence before
 claims.
@@ -115,7 +118,8 @@ claims.
 - "Should I proceed?" mid-cycle — defeats the mode. Proceed.
 - Guessing what the user wants when it is genuinely unclear — that is a halt
   (#2), not a guess. Autonomy ≠ recklessness.
-- Merging to main or deploying because "it all passed" — never. Stop at the PR.
+- Deploying because "it all passed" — never. Merging to main after green
+  verification is the default (git-integration rule); deploy is the hard stop.
 - Skipping a sub-skill's review loop to go faster — never. The quality gates
   stay; only the human approval gates are auto-passed.
 - Running on main/master without a worktree/branch — never.

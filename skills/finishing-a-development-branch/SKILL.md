@@ -1,6 +1,6 @@
 ---
 name: finishing-a-development-branch
-description: Use when implementation is complete, all tests pass, and you need to decide how to integrate the work - guides completion of development work by presenting structured options for merge, PR, or cleanup
+description: Use when implementation is complete, all tests pass, and you need to integrate the work - by default merges the branch into the base branch and pushes autonomously (no menu); presents structured options only for the listed exceptions (user asked for review, experimental work, semantic conflict, detached HEAD)
 ---
 
 # Finishing a Development Branch
@@ -9,7 +9,7 @@ description: Use when implementation is complete, all tests pass, and you need t
 
 Guide completion of development work by presenting clear options and handling chosen workflow.
 
-**Core principle:** Verify tests → Detect environment → Present options → Execute choice → Clean up.
+**Core principle:** Verify tests → Detect environment → Integrate autonomously (default) → Clean up. Menu only for exceptions.
 
 **Announce at start:** "I'm using the finishing-a-development-branch skill to complete this work."
 
@@ -81,9 +81,25 @@ git merge-base HEAD main 2>/dev/null || git merge-base HEAD master 2>/dev/null
 
 Or ask: "This branch split from main - is that correct?"
 
-### Step 4: Present Options
+### Step 4: Choose Integration Path
 
-**Normal repo and named-branch worktree — present exactly these 4 options:**
+**Default — integrate autonomously, do NOT ask.** Per
+`~/.claude/rules/git-integration.md`, a finished green branch goes in without
+a menu: execute Option 1 (merge into <base-branch> + push), then clean up
+(Step 6). If the base branch is checked out elsewhere or the repo's convention
+requires a PR — push the branch, `gh pr create`, then immediately
+`gh pr merge <N> --merge --delete-branch` yourself. Do not wait for review.
+
+**Present the menu ONLY when one of these holds:**
+
+- The user explicitly asked for a PR with review, or said "не мержи" /
+  "покажи сначала" / "keep the branch".
+- The work is experimental / exploratory (same exclusions as proactive
+  commits in CLAUDE.md).
+- A non-trivial semantic conflict with someone else's uncommitted WIP.
+- Detached HEAD (externally managed workspace) — reduced menu below.
+
+**Menu for those exceptional cases (normal repo / named-branch worktree):**
 
 ```
 Implementation complete. What would you like to do?
@@ -127,8 +143,17 @@ git merge <feature-branch>
 # Verify tests on merged result
 <test command>
 
+# Publish the merged result
+git push origin <base-branch>
+
 # Only after merge succeeds: cleanup worktree (Step 6), then delete branch
 ```
+
+If `<base-branch>` is checked out in another worktree (checkout fails):
+from the feature worktree, a fast-forward integration works without touching
+that checkout — `git fetch . HEAD:<base-branch> && git push origin <base-branch>`.
+If fast-forward is impossible, fall back to push + `gh pr create` +
+`gh pr merge --merge --delete-branch` (self-merge, no review wait).
 
 Then: Cleanup worktree (Step 6), then delete branch:
 
@@ -214,9 +239,10 @@ git worktree prune  # Self-healing: clean up any stale registrations
 - **Problem:** Merge broken code, create failing PR
 - **Fix:** Always verify tests before offering options
 
-**Open-ended questions**
-- **Problem:** "What should I do next?" is ambiguous
-- **Fix:** Present exactly 4 structured options (or 3 for detached HEAD)
+**Asking when the default applies**
+- **Problem:** "Merge or PR?" menus stall autonomous work the user already authorized
+- **Fix:** Integrate autonomously (Option 1 + push); menu only for the Step 4 exceptions
+- If a menu IS warranted, present exactly 4 structured options (or 3 for detached HEAD) — never an open-ended "What should I do next?"
 
 **Cleaning up worktree for Option 2**
 - **Problem:** Remove worktree user needs for PR iteration
@@ -243,6 +269,8 @@ git worktree prune  # Self-healing: clean up any stale registrations
 **Never:**
 - Proceed with failing tests
 - Merge without verifying tests on result
+- Ask "merge or PR?" when the autonomous default applies
+- Leave a PR you created waiting for review the user never asked for
 - Delete work without confirmation
 - Force-push without explicit request
 - Remove a worktree before confirming merge success
@@ -250,9 +278,9 @@ git worktree prune  # Self-healing: clean up any stale registrations
 - Run `git worktree remove` from inside the worktree
 
 **Always:**
-- Verify tests before offering options
-- Detect environment before presenting menu
-- Present exactly 4 options (or 3 for detached HEAD)
+- Verify tests before integrating (or before offering options)
+- Detect environment before acting
+- Integrate autonomously by default; menu only for the Step 4 exceptions
 - Get typed confirmation for Option 4
 - Clean up worktree for Options 1 & 4 only
 - `cd` to main repo root before worktree removal
