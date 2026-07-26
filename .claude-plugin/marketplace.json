@@ -7,8 +7,8 @@
   "plugins": [
     {
       "name": "superpowers-dim",
-      "description": "Форк obra/superpowers: Beads Bridge, режимы lite/autopilot, без SessionStart-инъекции",
-      "version": "6.1.1-dim.1",
+      "description": "Форк obra/superpowers: Beads Bridge, режимы lite/batched/autopilot, без SessionStart-инъекции",
+      "version": "6.1.1-dim.2",
       "source": "./",
       "author": {
         "name": "badigit"
