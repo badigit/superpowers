@@ -38,6 +38,18 @@ has skills/verification-before-completion/SKILL.md   'bd remember'     "verifica
 has skills/finishing-a-development-branch/SKILL.md   'beads-bridge'    "finishing ссылается на beads-bridge"
 has skills/finishing-a-development-branch/SKILL.md   'integrate autonomously' "finishing: автомерж по умолчанию"
 
+# 2b. Бюджетные правила в SDD (замена снятого режима batched): свой файл с тремя
+#     правилами и указатель на него из апстримного batching.md.
+B=skills/subagent-driven-development/references
+if [ -f "$B/dim-budget.md" ] && grep -q 'Transcription' "$B/dim-budget.md" \
+   && grep -q 'Solo-risk' "$B/dim-budget.md" && grep -q 'Re-review only on Critical' "$B/dim-budget.md" \
+   && grep -q 'Risk-based TDD' "$B/dim-budget.md" && grep -q 'High-risk stays strict' "$B/dim-budget.md"; then
+  ok "references/dim-budget.md: триаж, re-review только Critical, TDD по риску, high-risk strict"
+else
+  bad "references/dim-budget.md отсутствует или потерял одно из трёх правил"
+fi
+has "$B/batching.md" 'dim-budget.md' "batching.md ссылается на dim-budget.md"
+
 # 3. Наши скиллы на месте и с фронтматтером name.
 for s in lite autopilot beads-bridge; do
   if [ -f "skills/$s/SKILL.md" ] && grep -q "^name: $s\$" "skills/$s/SKILL.md"; then
@@ -50,6 +62,7 @@ done
 # 4. Все ссылки superpowers(-dim):<skill> в наших скиллах и патченых файлах
 #    указывают на существующий каталог skills/<skill>/.
 files="skills/lite/SKILL.md skills/autopilot/SKILL.md skills/beads-bridge/SKILL.md \
+skills/subagent-driven-development/references/dim-budget.md \
 skills/brainstorming/SKILL.md skills/writing-plans/SKILL.md \
 skills/verification-before-completion/SKILL.md skills/finishing-a-development-branch/SKILL.md"
 refs=0; broken=0
