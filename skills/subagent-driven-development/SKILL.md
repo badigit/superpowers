@@ -175,6 +175,9 @@ that implementer. Single-file mechanical fixes also take the cheapest tier.
 
 ## The Task Loop
 
+**Budget run:** if your human partner asked to spend less, read
+[references/dim-budget.md](references/dim-budget.md) before the first dispatch.
+
 **Small same-shape work:** when the plan lists several small edits of the
 same kind across files, read [references/batching.md](references/batching.md)
 before dispatching them.

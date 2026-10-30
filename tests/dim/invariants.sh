@@ -10,7 +10,9 @@
 # Корень по умолчанию — репозиторий форка. Namespace не важен: принимаются
 # и `superpowers:`, и `superpowers-dim:` (дерево до и после ребрендинга).
 #
-# Проверка мутацией: на чистом upstream/main тест ОБЯЗАН упасть.
+# Проверка мутацией: на чистом upstream/main тест ОБЯЗАН упасть, а на каждой из мутаций
+# из tests/dim/test-mutations.sh — тоже. Слово без структуры (комментарий со словом
+# `beads-bridge`) за указатель не считается: ищется ссылка вида superpowers(-dim):beads-bridge.
 set -u
 
 ROOT="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
@@ -20,6 +22,8 @@ fail=0
 ok()  { echo "ok    $1"; }
 bad() { echo "FAIL  $1"; fail=$((fail + 1)); }
 
+REF='superpowers(-dim)?:'
+
 # 1. hooks.json ровно {"hooks":{}}: отсутствующее поле, [] и пустой инлайн-список
 #    схлопываются обратно в auto-discovery SessionStart-хука апстрима.
 if [ -f hooks/hooks.json ] && [ "$(tr -d ' \t\r\n' < hooks/hooks.json)" = '{"hooks":{}}' ]; then
@@ -28,18 +32,21 @@ else
   bad "hooks/hooks.json не равен {\"hooks\":{}}: SessionStart-инъекция вернётся"
 fi
 
-# 2. Указатели на beads-bridge и автомерж в апстримных файлах.
-has() { # файл, шаблон, описание
+# 2. Указатели и автомерж в апстримных файлах.
+has() { # файл, шаблон (ERE), описание
   if [ -f "$1" ] && grep -Eq -- "$2" "$1"; then ok "$3"; else bad "$3 ($1)"; fi
 }
-has skills/brainstorming/SKILL.md                    'beads-bridge'    "brainstorming ссылается на beads-bridge"
-has skills/writing-plans/SKILL.md                    'beads-bridge'    "writing-plans ссылается на beads-bridge"
-has skills/verification-before-completion/SKILL.md   'bd remember'     "verification-before-completion: bd remember"
-has skills/finishing-a-development-branch/SKILL.md   'beads-bridge'    "finishing ссылается на beads-bridge"
+has skills/brainstorming/SKILL.md                    "${REF}beads-bridge"  "brainstorming: указатель на beads-bridge"
+has skills/writing-plans/SKILL.md                    "${REF}beads-bridge"  "writing-plans: указатель на beads-bridge"
+has skills/verification-before-completion/SKILL.md   "${REF}beads-bridge"  "verification: указатель на beads-bridge"
+has skills/verification-before-completion/SKILL.md   'bd remember'         "verification: bd remember"
+has skills/finishing-a-development-branch/SKILL.md   "${REF}beads-bridge"  "finishing: указатель на beads-bridge"
+has skills/finishing-a-development-branch/SKILL.md   'Fork override'       "finishing: переопределение шага 4"
 has skills/finishing-a-development-branch/SKILL.md   'integrate autonomously' "finishing: автомерж по умолчанию"
+has skills/finishing-a-development-branch/SKILL.md   'unresolved Critical or Important' "finishing: остаточные находки SDD останавливают автомерж"
 
 # 2b. Бюджетные правила в SDD (замена снятого режима batched): свой файл с тремя
-#     правилами и указатель на него из апстримного batching.md.
+#     правилами, указатель из основного SKILL.md (виден до первого диспатча) и из batching.md.
 B=skills/subagent-driven-development/references
 if [ -f "$B/dim-budget.md" ] && grep -q 'Transcription' "$B/dim-budget.md" \
    && grep -q 'Solo-risk' "$B/dim-budget.md" && grep -q 'Re-review only on Critical' "$B/dim-budget.md" \
@@ -48,7 +55,22 @@ if [ -f "$B/dim-budget.md" ] && grep -q 'Transcription' "$B/dim-budget.md" \
 else
   bad "references/dim-budget.md отсутствует или потерял одно из трёх правил"
 fi
-has "$B/batching.md" 'dim-budget.md' "batching.md ссылается на dim-budget.md"
+has skills/subagent-driven-development/SKILL.md "references/dim-budget\.md" "SDD SKILL.md: указатель на dim-budget.md"
+has "$B/batching.md"                            'dim-budget\.md'            "batching.md: указатель на dim-budget.md"
+
+# 2c. Манифесты плагина: валидный JSON и наши имена (python есть везде, где собирается копия;
+#     если его нет, проверка по grep).
+for m in .claude-plugin/plugin.json .claude-plugin/marketplace.json; do
+  if [ -f "$m" ] && grep -q '"name": "superpowers-dim"' "$m" \
+     && { ! command -v python >/dev/null 2>&1 || python -m json.tool "$m" >/dev/null 2>&1; }; then
+    ok "манифест $m"
+  else
+    bad "манифест $m отсутствует, не JSON или не superpowers-dim"
+  fi
+done
+has .claude-plugin/marketplace.json '"name": "dim"' "marketplace называется dim"
+has scripts/rebrand.sh 'superpowers-dim' "scripts/rebrand.sh на месте"
+has skills/finishing-a-development-branch/SKILL.md 'When you do show the menu' "finishing: фраза «ждать ответа» привязана к меню"
 
 # 3. Наши скиллы на месте и с фронтматтером name.
 for s in lite autopilot beads-bridge; do
@@ -59,28 +81,25 @@ for s in lite autopilot beads-bridge; do
   fi
 done
 
-# 4. Все ссылки superpowers(-dim):<skill> в наших скиллах и патченых файлах
-#    указывают на существующий каталог skills/<skill>/.
-files="skills/lite/SKILL.md skills/autopilot/SKILL.md skills/beads-bridge/SKILL.md \
-skills/subagent-driven-development/references/dim-budget.md \
-skills/brainstorming/SKILL.md skills/writing-plans/SKILL.md \
-skills/verification-before-completion/SKILL.md skills/finishing-a-development-branch/SKILL.md"
+# 4. Все ссылки superpowers(-dim):<skill> во ВСЕХ файлах skills/ и tests/claude-code/ ведут
+#    на существующий skills/<skill>/SKILL.md с совпадающим name.
 refs=0; broken=0
-for f in $files; do
-  [ -f "$f" ] || continue
-  for name in $(grep -oE 'superpowers(-dim)?:[a-z][a-z0-9-]*' "$f" | sed 's/^[^:]*://' | sort -u); do
-    refs=$((refs + 1))
-    if [ ! -d "skills/$name" ]; then
-      bad "$f: ссылка на несуществующий скилл '$name'"; broken=$((broken + 1))
-    fi
-  done
-done
-[ "$broken" -eq 0 ] && ok "ссылки на скиллы разрешаются ($refs шт.)"
+while IFS= read -r name; do
+  [ -n "$name" ] || continue
+  refs=$((refs + 1))
+  if [ ! -f "skills/$name/SKILL.md" ]; then
+    bad "ссылка на скилл '$name': нет skills/$name/SKILL.md"; broken=$((broken + 1))
+  elif ! grep -q "^name: $name\$" "skills/$name/SKILL.md"; then
+    bad "skills/$name/SKILL.md: name не совпадает с каталогом"; broken=$((broken + 1))
+  fi
+done < <(grep -rhoE "${REF}[a-z][a-z0-9-]*" skills tests/claude-code 2>/dev/null | sed 's/^[^:]*://' | sort -u)
+[ "$broken" -eq 0 ] && ok "ссылки на скиллы разрешаются ($refs уникальных)"
 
-# 5. После ребрендинга (если он уже прогнан) не должно остаться смеси namespace.
+# 5. Если ребрендинг уже прогнан, смеси namespace быть не должно. Подстрока
+#    `superpowers:` не входит в `superpowers-dim:`, поэтому строка не исключается целиком.
 if grep -rq 'superpowers-dim:' skills/ 2>/dev/null; then
-  if grep -rn 'superpowers:' skills/ 2>/dev/null | grep -v 'superpowers-dim:' | grep -q .; then
-    bad "в skills/ смесь superpowers: и superpowers-dim: (ребрендинг неполный)"
+  if grep -rn 'superpowers:' skills/ 2>/dev/null | grep -q .; then
+    bad "в skills/ остался апстримный namespace superpowers: при брендированном дереве"
   else
     ok "namespace приведён к superpowers-dim: целиком"
   fi

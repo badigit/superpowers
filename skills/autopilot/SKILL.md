@@ -49,9 +49,12 @@ from durable state instead of restarting:
    `.designs/bd-<id>/spec.md`)? → design is done, don't redo it.
 2. Plan exists in `docs/superpowers/plans/` (beads projects:
    `.designs/bd-<id>/plan.md`)? → planning is done, don't redo it.
-3. Progress ledger (`.superpowers/sdd/progress.md`) lists completed tasks? →
-   trust it and `git log`; resume at the first task not marked complete. Never
-   re-dispatch a completed task.
+3. This plan's progress ledger (`<workspace>/progress.md`, workspace from
+   `bash scripts/sdd-workspace PLAN_FILE` in subagent-driven-development)
+   names this plan on its first line and lists completed tasks? → trust it and
+   `git log`; resume at the first task not marked complete (see
+   references/resuming.md there). A ledger naming another plan, or the old flat
+   `.superpowers/sdd/progress.md`, is not yours. Never re-dispatch a completed task.
 4. All tasks complete? → proceed to finishing (merge + push), then report and
    stop.
 

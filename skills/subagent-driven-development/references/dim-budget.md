@@ -7,6 +7,10 @@ Apply these three rules only when your human partner asked to spend less
 in the plan is high-risk. They trade review coverage for cost; do not spend that currency
 where a missed defect is expensive.
 
+On a budget run these rules override the conflicting defaults in SKILL.md (the
+"every round ends with a scoped re-review" rationalization row and the re-review
+step in references/fix-loop.md) for non-high-risk tasks only.
+
 **High-risk stays strict.** Auth, payments, data migration, concurrency, public API, or
 anything your human partner called risky: one implementer and one reviewer per task, a
 scoped re-review after every fix round, TDD throughout. None of the rules below applies.

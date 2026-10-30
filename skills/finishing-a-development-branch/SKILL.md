@@ -58,15 +58,18 @@ Confirm before merging: merging into the wrong base is expensive to undo.
 The workshop rule `41-git-integration` (`~/.claude/rules/`) says a finished, green
 branch goes in without asking: do Option 1 (merge into the base branch), then
 `git push origin <base-branch>`, then clean up (Step 6). If the base branch is
-checked out in another worktree, integrate from this one with
-`git fetch . HEAD:<base-branch> && git push origin <base-branch>`. If a
-fast-forward is impossible or the repo requires a PR: push the branch, create the
+checked out in another worktree, leave that checkout alone and integrate from
+this one with `git push origin HEAD:<base-branch>` (fast-forward only; a local
+`git fetch . HEAD:<base-branch>` is refused for a branch checked out elsewhere).
+If a fast-forward is impossible or the repo requires a PR: push the branch, create the
 PR and merge it yourself (`gh pr merge <N> --merge --delete-branch`). Do not wait
 for a review nobody asked for. Never deploy.
 
 Show the menu below ONLY when: your human partner asked for a PR with review or said
-to keep the branch; the work is experimental; there is a non-trivial semantic
-conflict with someone else's uncommitted work; or HEAD is detached. The rest of this
+to keep the branch; the work is experimental; the final review of subagent-driven
+development left unresolved Critical or Important findings (they were meant to
+reach your human partner here, so show them and wait); there is a non-trivial
+semantic conflict with someone else's uncommitted work; or HEAD is detached. The rest of this
 step applies to those cases.
 
 **Normal repo and named-branch worktree — present exactly these 3 options:**
@@ -95,8 +98,8 @@ Which option?
 Present the menu exactly as written — concise, with every option coming
 from the list above. Discarding the work happens only in response to your
 human partner explicitly asking for it (see "If your human partner asks to
-discard the work" below). Wait for their answer; the integration decision
-is theirs.
+discard the work" below). When you do show the menu, wait for their answer;
+the integration decision is theirs.
 
 ## Step 5: Execute Choice
 
