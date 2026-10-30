@@ -23,7 +23,9 @@ Tests failing (<N> failures). Must fix before completing:
 [Show failures]
 ```
 
-**If tests pass:** continue to Step 2.
+**If tests pass:** continue to Step 2. In a project with a beads workspace, store
+the lesson of this work first, per `superpowers:beads-bridge` (skip silently
+elsewhere).
 
 ## Step 2: Detect Environment
 
@@ -51,6 +53,21 @@ known, ask: "This branch split from <your best guess> - is that correct?"
 Confirm before merging: merging into the wrong base is expensive to undo.
 
 ## Step 4: Present Options
+
+**Fork override — integrate autonomously by default; do not show the menu.**
+The workshop rule `41-git-integration` (`~/.claude/rules/`) says a finished, green
+branch goes in without asking: do Option 1 (merge into the base branch), then
+`git push origin <base-branch>`, then clean up (Step 6). If the base branch is
+checked out in another worktree, integrate from this one with
+`git fetch . HEAD:<base-branch> && git push origin <base-branch>`. If a
+fast-forward is impossible or the repo requires a PR: push the branch, create the
+PR and merge it yourself (`gh pr merge <N> --merge --delete-branch`). Do not wait
+for a review nobody asked for. Never deploy.
+
+Show the menu below ONLY when: your human partner asked for a PR with review or said
+to keep the branch; the work is experimental; there is a non-trivial semantic
+conflict with someone else's uncommitted work; or HEAD is detached. The rest of this
+step applies to those cases.
 
 **Normal repo and named-branch worktree — present exactly these 3 options:**
 
@@ -214,7 +231,7 @@ place. If your platform provides a workspace-exit tool, use it.
 | Excuse | Reality |
 |--------|---------|
 | "Tests passed earlier this session" | Run the suite on the tree you are about to integrate. A green run only proves the tree it ran on. |
-| "They obviously want it merged" | Integration is your human partner's decision. Present the menu and wait. |
+| "They obviously want it merged" | In this fork the default IS to merge and push without asking (Step 4 override). Ask only for the listed exceptions. |
 | "They seem done with this feature — I'll offer to discard it" | The menu is complete as written. Discard happens only when your human partner asks for it in so many words. |
 | "'Yeah, get rid of it' counts as confirmation" | Only the typed word `discard` authorizes deletion. |
 | "The PR is up, so the worktree is clutter now" | PR feedback gets fixed in that worktree. It stays until the work lands. |

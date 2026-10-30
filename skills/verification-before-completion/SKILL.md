@@ -103,6 +103,12 @@ Skip any step = lying, not verifying
 ❌ Trust agent report
 ```
 
+## After Verification
+
+In a project with a beads workspace, once verification has passed, store the
+non-obvious lesson of this work (`bd remember`) per `superpowers:beads-bridge`. Elsewhere skip
+this section silently.
+
 ## When To Apply
 
 **ALWAYS before:**

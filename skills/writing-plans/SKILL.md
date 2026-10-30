@@ -15,6 +15,7 @@ Write implementation plans for an engineer who has not seen this codebase or thi
 
 **Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
+- (Projects with a beads workspace: plan path and child beads per `superpowers:beads-bridge`)
 
 ## Scope Check
 

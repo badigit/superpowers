@@ -224,6 +224,8 @@ builder check.
 **Where it goes:** in a software repo,
 `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`, committed.
 Otherwise, ask. Your human partner's preferences override both.
+In a project with a beads workspace the spec goes to `.designs/bd-{id}/spec.md`
+instead: follow `superpowers:beads-bridge`.
 
 **Builder check** (for a project): dispatch a fresh subagent with
 `builder-check-prompt.md` in this directory. When you tell your human
