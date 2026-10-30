@@ -29,7 +29,7 @@ mutate() { # имя, команда-мутация (выполняется в к
 }
 
 mutate "вернулся SessionStart-хук"        'cp hooks/hooks.json x && printf "{\"hooks\":{\"SessionStart\":[]}}" > hooks/hooks.json'
-mutate "указатель writing-plans — комментарий" "sed -i 's/superpowers:beads-bridge/# beads-bridge removed/' skills/writing-plans/SKILL.md"
+mutate "указатель writing-plans — комментарий" "sed -E -i 's/superpowers(-dim)?:beads-bridge/# beads-bridge removed/' skills/writing-plans/SKILL.md"
 mutate "указатель brainstorming удалён"   "sed -i '/beads-bridge/d' skills/brainstorming/SKILL.md"
 mutate "bd remember удалён из verification" "sed -i 's/bd remember/remember/' skills/verification-before-completion/SKILL.md"
 mutate "автомерж удалён из finishing"     "sed -i 's/integrate autonomously/ask the user/' skills/finishing-a-development-branch/SKILL.md"
