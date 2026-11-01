@@ -30,3 +30,22 @@ if [ "$count" -eq 0 ]; then
 else
   echo "готово: файлов изменено — ${count}"
 fi
+
+# Манифесты других харнессов (Codex, Antigravity, Cursor): имя плагина обязано совпасть с
+# namespace из текста скиллов, иначе `superpowers-dim:writing-plans` в цепочке не найдётся.
+# Меняется только первое точное `"name": "<от>"`: `superpowers-dim` и `superpowers-dev`
+# под образец не попадают, поэтому прогон идемпотентен.
+rename_json() { # файл, от, к
+  [ -f "$1" ] || return 0
+  if grep -q "\"name\": \"$2\"" "$1"; then
+    sed -i "0,/\"name\": \"$2\"/s//\"name\": \"$3\"/" "$1"
+    echo "  манифест: $1: $2 -> $3"
+  fi
+}
+rename_json .codex-plugin/plugin.json superpowers "$BRAND"
+rename_json .antigravity-plugin/plugin.json superpowers "$BRAND"
+rename_json .cursor-plugin/plugin.json superpowers "$BRAND"
+rename_json .agents/plugins/marketplace.json superpowers-dev dim
+rename_json .agents/plugins/marketplace.json superpowers "$BRAND"
+# Метка для tests/dim/invariants.sh: имена манифестов проверяются только на ребрендированном дереве.
+: > .dim-rebranded

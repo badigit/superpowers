@@ -34,6 +34,8 @@ mutate "указатель brainstorming удалён"   "sed -i '/beads-bridge/
 mutate "bd remember удалён из verification" "sed -i 's/bd remember/remember/' skills/verification-before-completion/SKILL.md"
 mutate "автомерж удалён из finishing"     "sed -i 's/integrate autonomously/ask the user/' skills/finishing-a-development-branch/SKILL.md"
 mutate "скилл lite удалён"                "rm -rf skills/lite"
+mutate "манифест Codex вернул апстримное имя" "sed -i 's/\"name\": \"superpowers-dim\"/\"name\": \"superpowers\"/' .codex-plugin/plugin.json"
+mutate "marketplace Codex потерял имя dim" "sed -i 's/\"name\": \"dim\"/\"name\": \"superpowers-dev\"/' .agents/plugins/marketplace.json"
 mutate "битая ссылка в неперечисленном файле" "echo 'see superpowers:xyz-missing' >> skills/executing-plans/SKILL.md"
 mutate "каталог скилла есть, SKILL.md нет" "rm skills/requesting-code-review/SKILL.md"
 mutate "name скилла разошёлся с каталогом" "sed -i 's/^name: lite/name: lite-x/' skills/lite/SKILL.md"

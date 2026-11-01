@@ -69,6 +69,14 @@ for m in .claude-plugin/plugin.json .claude-plugin/marketplace.json; do
   fi
 done
 has .claude-plugin/marketplace.json '"name": "dim"' "marketplace называется dim"
+# Манифесты Codex, Antigravity, Cursor: имя совпадает с namespace скиллов (только после ребрендинга).
+if [ -f .dim-rebranded ]; then
+  for m in .codex-plugin/plugin.json .antigravity-plugin/plugin.json .cursor-plugin/plugin.json; do
+    has "$m" '"name": "superpowers-dim"' "манифест $m: имя superpowers-dim"
+  done
+  has .agents/plugins/marketplace.json '"name": "superpowers-dim"' "Codex marketplace: плагин superpowers-dim"
+  has .agents/plugins/marketplace.json '"name": "dim"' "Codex marketplace называется dim"
+fi
 has scripts/rebrand.sh 'superpowers-dim' "scripts/rebrand.sh на месте"
 has skills/finishing-a-development-branch/SKILL.md 'When you do show the menu' "finishing: фраза «ждать ответа» привязана к меню"
 
