@@ -53,5 +53,14 @@ if grep -q '"url": "\./"' .agents/plugins/marketplace.json 2>/dev/null; then
   sed -i -z 's|"source": "url",\n\( *\)"url": "\./"|"source": "local",\n\1"path": "./"|' .agents/plugins/marketplace.json
   echo "  манифест: .agents/plugins/marketplace.json: источник url -> local"
 fi
+# using-superpowers требует загружать скиллы «при 1% шансе» и начинать любую задачу с brainstorming:
+# это ломает порог запуска тяжёлой цепочки. В Claude Code его гасит skillOverrides, а у Codex,
+# Antigravity и Cursor такого рубильника на скилл плагина нет, поэтому описание переписывается
+# в копии: скилл остаётся в дереве (на него ссылаются другие скиллы), но срабатывать не должен.
+UP=skills/using-superpowers/SKILL.md
+if [ -f "$UP" ] && grep -q '^description: Use when starting any conversation' "$UP"; then
+  sed -i 's|^description: Use when starting any conversation.*|description: Disabled in this setup, do not invoke. Starting a conversation does not require loading skills; superpowers-dim:lite is the default for routine changes, the heavy chain only on explicit request.|' "$UP"
+  echo "  описание using-superpowers: отключено в этой сборке"
+fi
 # Метка для tests/dim/invariants.sh: имена манифестов проверяются только на ребрендированном дереве.
 : > .dim-rebranded
