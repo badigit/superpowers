@@ -73,9 +73,18 @@ has .claude-plugin/marketplace.json '"name": "dim"' "marketplace называе�
 if [ -f .dim-rebranded ]; then
   has skills/using-superpowers/SKILL.md '^description: Disabled in this setup' "using-superpowers: описание отключено (не требует грузить скиллы при каждом запросе)"
   has skills/brainstorming/SKILL.md '^description: "Use for work that spans several' "brainstorming: описание с порогом (не «обязателен перед любой творческой работой»)"
+  for m in .codex-plugin/plugin.json .antigravity-plugin/plugin.json .cursor-plugin/plugin.json .agents/plugins/marketplace.json; do
+    # Манифест обязан быть валидным JSON: проверка строк «имя на месте» повреждённый файл пропускала.
+    if [ -f "$m" ] && { ! command -v python >/dev/null 2>&1 || python -m json.tool "$m" >/dev/null 2>&1; }; then
+      ok "манифест $m: валидный JSON"
+    else
+      bad "манифест $m отсутствует или не JSON"
+    fi
+  done
   for m in .codex-plugin/plugin.json .antigravity-plugin/plugin.json .cursor-plugin/plugin.json; do
     has "$m" '"name": "superpowers-dim"' "манифест $m: имя superpowers-dim"
   done
+  has .agents/plugins/marketplace.json '"path": "\./"' "Codex marketplace: путь источника ./"
   has .agents/plugins/marketplace.json '"name": "superpowers-dim"' "Codex marketplace: плагин superpowers-dim"
   has .agents/plugins/marketplace.json '"name": "dim"' "Codex marketplace называется dim"
   has .agents/plugins/marketplace.json '"source": "local"' "Codex marketplace: локальный источник, а не git url"
