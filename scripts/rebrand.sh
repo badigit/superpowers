@@ -47,5 +47,11 @@ rename_json .antigravity-plugin/plugin.json superpowers "$BRAND"
 rename_json .cursor-plugin/plugin.json superpowers "$BRAND"
 rename_json .agents/plugins/marketplace.json superpowers-dev dim
 rename_json .agents/plugins/marketplace.json superpowers "$BRAND"
+# Апстримный marketplace Codex указывает источник как `url`: Codex клонирует его git'ом, а копия
+# сборки не репозиторий («does not appear to be a git repository»). Нужен локальный источник.
+if grep -q '"url": "\./"' .agents/plugins/marketplace.json 2>/dev/null; then
+  sed -i -z 's|"source": "url",\n\( *\)"url": "\./"|"source": "local",\n\1"path": "./"|' .agents/plugins/marketplace.json
+  echo "  манифест: .agents/plugins/marketplace.json: источник url -> local"
+fi
 # Метка для tests/dim/invariants.sh: имена манифестов проверяются только на ребрендированном дереве.
 : > .dim-rebranded
