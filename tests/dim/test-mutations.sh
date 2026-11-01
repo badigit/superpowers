@@ -35,6 +35,7 @@ mutate "bd remember удалён из verification" "sed -i 's/bd remember/remem
 mutate "автомерж удалён из finishing"     "sed -i 's/integrate autonomously/ask the user/' skills/finishing-a-development-branch/SKILL.md"
 mutate "скилл lite удалён"                "rm -rf skills/lite"
 mutate "манифест Codex вернул апстримное имя" "sed -i 's/\"name\": \"superpowers-dim\"/\"name\": \"superpowers\"/' .codex-plugin/plugin.json"
+mutate "brainstorming снова обязателен перед любой работой" "sed -i 's/^description: \"Use for work that spans.*/description: \"You MUST use this before any creative work\"/' skills/brainstorming/SKILL.md"
 mutate "using-superpowers снова обязателен к загрузке" "sed -i 's/^description: Disabled in this setup.*/description: Use when starting any conversation - requiring skill invocation before ANY response/' skills/using-superpowers/SKILL.md"
 mutate "marketplace Codex вернул git url" "sed -i 's/\"source\": \"local\"/\"source\": \"url\"/' .agents/plugins/marketplace.json"
 mutate "marketplace Codex потерял имя dim" "sed -i 's/\"name\": \"dim\"/\"name\": \"superpowers-dev\"/' .agents/plugins/marketplace.json"

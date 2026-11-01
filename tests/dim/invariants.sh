@@ -72,6 +72,7 @@ has .claude-plugin/marketplace.json '"name": "dim"' "marketplace называе�
 # Манифесты Codex, Antigravity, Cursor: имя совпадает с namespace скиллов (только после ребрендинга).
 if [ -f .dim-rebranded ]; then
   has skills/using-superpowers/SKILL.md '^description: Disabled in this setup' "using-superpowers: описание отключено (не требует грузить скиллы при каждом запросе)"
+  has skills/brainstorming/SKILL.md '^description: "Use for work that spans several' "brainstorming: описание с порогом (не «обязателен перед любой творческой работой»)"
   for m in .codex-plugin/plugin.json .antigravity-plugin/plugin.json .cursor-plugin/plugin.json; do
     has "$m" '"name": "superpowers-dim"' "манифест $m: имя superpowers-dim"
   done

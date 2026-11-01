@@ -62,5 +62,14 @@ if [ -f "$UP" ] && grep -q '^description: Use when starting any conversation' "$
   sed -i 's|^description: Use when starting any conversation.*|description: Disabled in this setup, do not invoke. Starting a conversation does not require loading skills; superpowers-dim:lite is the default for routine changes, the heavy chain only on explicit request.|' "$UP"
   echo "  описание using-superpowers: отключено в этой сборке"
 fi
+# Описание brainstorming в апстриме («обязателен перед любой творческой работой») читают как порог:
+# агент открывает тяжёлую цепочку на любой запрос. Порог нашего контура: несколько подсистем, неясный
+# дизайн, высокий риск или прямая просьба; рутина идёт через lite. Правило лежит в описании, потому что
+# у Codex профиль правил ограничен по размеру, а описание читают в момент выбора скилла в любом харнессе.
+BR=skills/brainstorming/SKILL.md
+if [ -f "$BR" ] && grep -q '^description: "You MUST use this before any creative work' "$BR"; then
+  sed -i 's|^description: "You MUST use this before any creative work.*|description: "Use for work that spans several independent subsystems, has an unclear design, carries high risk (auth, payments, migrations, concurrency, public API), or when the user asks for brainstorming, a spec, a plan, or superpowers. Not for routine changes: those go through superpowers-dim:lite."|' "$BR"
+  echo "  описание brainstorming: порог тяжёлой цепочки"
+fi
 # Метка для tests/dim/invariants.sh: имена манифестов проверяются только на ребрендированном дереве.
 : > .dim-rebranded
