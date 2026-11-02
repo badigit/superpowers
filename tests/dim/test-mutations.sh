@@ -36,6 +36,8 @@ mutate "автомерж удалён из finishing"     "sed -i 's/integrate a
 mutate "скилл lite удалён"                "rm -rf skills/lite"
 mutate "манифест Codex вернул апстримное имя" "sed -i 's/\"name\": \"superpowers-dim\"/\"name\": \"superpowers\"/' .codex-plugin/plugin.json"
 mutate "brainstorming снова обязателен перед любой работой" "sed -i 's/^description: \"Use for work that spans.*/description: \"You MUST use this before any creative work\"/' skills/brainstorming/SKILL.md"
+mutate "brainstorming потерял временную политику approval" "sed -i '/TEMPORARY-DIM-DESIGN-POLICY/d' skills/brainstorming/SKILL.md"
+mutate "brainstorming вернул обязательное ожидание design approval" "printf '%s\\n' 'Nothing gets built until your human partner approves the design doc' >> skills/brainstorming/SKILL.md"
 mutate "using-superpowers снова обязателен к загрузке" "sed -i 's/^description: Disabled in this setup.*/description: Use when starting any conversation - requiring skill invocation before ANY response/' skills/using-superpowers/SKILL.md"
 mutate "манифест Codex — битый JSON с прежними строками" "printf '%s\n' '{\"name\": \"superpowers-dim\",' > .codex-plugin/plugin.json"
 mutate "marketplace Codex — неверный путь источника" "sed -i 's#\"path\": \"./\"#\"path\": \"./nowhere\"#' .agents/plugins/marketplace.json"

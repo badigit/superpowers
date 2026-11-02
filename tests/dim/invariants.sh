@@ -73,6 +73,13 @@ has .claude-plugin/marketplace.json '"name": "dim"' "marketplace называе�
 if [ -f .dim-rebranded ]; then
   has skills/using-superpowers/SKILL.md '^description: Disabled in this setup' "using-superpowers: описание отключено (не требует грузить скиллы при каждом запросе)"
   has skills/brainstorming/SKILL.md '^description: "Use for work that spans several' "brainstorming: описание с порогом (не «обязателен перед любой творческой работой»)"
+  has skills/brainstorming/SKILL.md '<TEMPORARY-DIM-DESIGN-POLICY>' "brainstorming: временная политика без обязательного design approval"
+  has skills/brainstorming/SKILL.md 'Do not pause solely to request approval of the design doc' "brainstorming: ожидание design approval отключено"
+  if grep -q 'Nothing gets built until your human partner approves the design doc' skills/brainstorming/SKILL.md; then
+    bad "brainstorming: обязательный design approval вернулся"
+  else
+    ok "brainstorming: прежний design approval gate отсутствует"
+  fi
   for m in .codex-plugin/plugin.json .antigravity-plugin/plugin.json .cursor-plugin/plugin.json .agents/plugins/marketplace.json; do
     # Манифест обязан быть валидным JSON: проверка строк «имя на месте» повреждённый файл пропускала.
     if [ -f "$m" ] && { ! command -v python >/dev/null 2>&1 || python -m json.tool "$m" >/dev/null 2>&1; }; then

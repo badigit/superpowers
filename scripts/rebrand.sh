@@ -71,5 +71,45 @@ if [ -f "$BR" ] && grep -q '^description: "You MUST use this before any creative
   sed -i 's|^description: "You MUST use this before any creative work.*|description: "Use for work that spans several independent subsystems, has an unclear design, carries high risk (auth, payments, migrations, concurrency, public API), or when the user asks for brainstorming, a spec, a plan, or superpowers. Not for routine changes: those go through superpowers-dim:lite."|' "$BR"
   echo "  описание brainstorming: порог тяжёлой цепочки"
 fi
+# Временная политика владельца: обязательное ожидание утверждения спеки мешает продолжать
+# уже порученную работу. Накладываем только на сборочную копию; апстримный скилл не меняем.
+# Вернуть прежний gate: revert коммита этой политики и штатная переустановка плагина.
+python - <<'PY'
+from pathlib import Path
+import re
+
+path = Path('skills/brainstorming/SKILL.md')
+text = path.read_bytes().decode('utf-8')
+marker = '<TEMPORARY-DIM-DESIGN-POLICY>'
+if marker not in text:
+    old_step = '3. Get their approval of that doc.'
+    if old_step not in text or '<HARD-GATE>' not in text or '</HARD-GATE>' not in text:
+        raise SystemExit('brainstorming changed upstream: review temporary design approval policy before packaging')
+    text = text.replace(old_step, '3. Self-review that doc and resolve material ambiguities; do not wait for routine approval.', 1)
+    policy = '''<TEMPORARY-DIM-DESIGN-POLICY>
+The owner's mandatory design-document approval checkpoint is temporarily
+suspended in this fork. Do not pause solely to request approval of the design doc.
+Once the requested direction is clear, write and review the design, then invoke
+superpowers-dim:writing-plans and continue the authorized work. A separate
+approval message is not required. State assumptions and resolve routine choices
+yourself; ask only when a material ambiguity prevents useful work or when the
+owner explicitly requested a checkpoint such as "show me first".
+
+Keep design review, verification and the owner's scope constraints. This policy
+does not grant new access, bypass permission controls or authorize production
+delivery. It takes precedence over references elsewhere in this skill to waiting
+for design approval. It remains active until the owner restores the checkpoint.
+</TEMPORARY-DIM-DESIGN-POLICY>'''
+    text, count = re.subn(r'<HARD-GATE>.*?</HARD-GATE>', lambda _: policy, text, count=1, flags=re.S)
+    if count != 1:
+        raise SystemExit('expected exactly one design approval gate')
+    text = text.replace('A design doc you haven\'t written isn\'t approved.',
+                        'Write and self-review the design; the temporary fork policy does not require a separate approval message.')
+    text = text.replace('Keeping it is a new request. Back through the gate.',
+                        'Keeping it needs a real design and the owner\'s authorized scope; use the temporary fork policy.')
+    path.write_bytes(text.encode('utf-8'))
+    print('  brainstorming: mandatory design approval temporarily suspended')
+PY
+
 # Метка для tests/dim/invariants.sh: имена манифестов проверяются только на ребрендированном дереве.
 : > .dim-rebranded
